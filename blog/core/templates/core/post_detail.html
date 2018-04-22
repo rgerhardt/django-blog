@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <h1>{{ post.title }}</h1>
+
+    <p>{{ post.text|safe|linebreaksbr }}</p>
+
+    {% if post.published %}
+        <p>Published on: {{ post.published_at }}</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        {% if not post.published %}
+            <a role="button" class="btn btn-info" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+        {% endif %}
+
+        <a class="btn btn-primary" href="{% url 'post_edit' pk=post.pk %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'post_remove' pk=post.pk %}">Remove</a>
+    {% endif %}
+
+    <hr>
+
+    <div>
+        <a class="btn btn-primary btn-comment" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+    </div>
+
+    <div class="mt-4">
+        {% for comment in post.comments.all %}
+
+            {% if user.is_authenticated or comment.approved_comment %}
+                <p>{{ comment.text|safe|linebreaks }}</p>
+                <div>
+                    <p class="text-muted mb-0">Posted by: <strong>{{ comment.author }}</strong></p>
+                    <p class="text-muted mb-0">Created at: <strong>{{ comment.created_date }}</strong></p>
+                </div>
+                {% if user.is_authenticated %}
+                    {% if not comment.approved_comment %}
+                        <button class="approve-btn btn btn-primary" data-approve-url="{% url 'comment_approve' pk=comment.pk %}">
+                            Approve
+                        </button>
+                    {% else %}
+                        <button class="disapprove-btn btn btn-danger" role="button" data-disapprove-url="{% url 'comment_disapprove' pk=comment.pk %}">
+                            Disapprove
+                        </button>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% empty %}
+            <p>No comments found!</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/post_detail.js' %}"></script>
+{% endblock %}

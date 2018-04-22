@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Post</h1>
+    </div>
+
+    <form class="form" method="POST" novalidate>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+
+        <button type="submit" class="btn btn-primary">Save</button>
+
+    </form>
+
+{% endblock %}

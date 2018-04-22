@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="page-header">
+        <h1>Page drafts!</h1>
+    </div>
+    {% for post in post_list %}
+        <div>
+            <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+            <p class="text-muted">created: {{ post.created_date}}</p>
+            <div>
+                <h3>Summary:</h3>
+                <p>{{ post.summary }}</p>
+            </div>
+            <div>
+                <h3>Text:</h3>
+                <p>{{ post.text|truncatechars:200 }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <p>No post found!</p>
+    {% endfor %}
+{% endblock %}

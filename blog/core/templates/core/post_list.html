@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>
+        {% for post in post_list %}
+            <div class="mb-2">
+                <div class="blog-header">
+                    <h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+                </div>
+
+                <p class="lead">
+                    {{ post.summary }}
+                </p>
+
+                <div>
+                    <p class="mb-0 text-muted">Published on: {{ post.published_at|date:"d M Y"}}</p>
+                    <p class="mb-0 text-muted">Comments: {{ post.approve_comments.count }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p>No post found!</p>
+        {% endfor %}
+    </div>
+{% endblock %}
